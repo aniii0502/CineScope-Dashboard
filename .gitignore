@@ -1,0 +1,64 @@
+# Visual Studio / .NET Core
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+/bin/
+/obj/
+/out/
+
+# Rider IDE
+.idea/
+
+# Visual Studio Code
+.vscode/
+
+# NuGet packages
+*.nupkg
+*.snupkg
+*.nuspec
+packages/
+
+# ASP.NET Core
+appsettings*.json
+wwwroot/lib/
+
+# Logs
+*.log
+logs/
+*.vsix
+
+# Dotnet cache
+*.dotnet/
+*.dotnet_tool/
+
+# Docker
+docker-compose.override.yml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# JetBrains Rider
+.idea/
+
+# Rider caches
+.idea/*workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+.idea/vcs.xml
+.idea/modules.xml
+.idea/jsLibraryMappings.xml
+.idea/.name
+
+# User secrets (if using .NET secret manager)
+secrets.json
+
+# Optional: exclude temporary files
+*.tmp
+*.temp
+*.bak
+*.json
