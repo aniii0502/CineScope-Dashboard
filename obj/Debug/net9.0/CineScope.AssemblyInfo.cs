@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CineScope")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5b6bcf433b5e57448e085931ddd594e393fea0f0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+21e3a93cd857fab455e28294888939b490aa250e")]
 [assembly: System.Reflection.AssemblyProductAttribute("CineScope")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CineScope")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
