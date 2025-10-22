@@ -1,4 +1,5 @@
 # CineScope
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/aa5ea862-1871-4ef5-927a-d77b5ae6cf1c" />
 
 
 ## Overview
@@ -20,6 +21,7 @@ The application also includes a fully functional **contact form** to collect use
 - Smooth **animations and modern UI design**.
 
 ---
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/7fd68f51-4c33-4922-9c31-a922f1195577" />
 
 ## Technologies Used
 - **Backend:** ASP.NET Core, C#  
