@@ -1,0 +1,11 @@
+@model CineScope.Models.CrewMember
+
+<a asp-controller="Persons" asp-action="Details" asp-route-id="@Model.Id" class="crew-card">
+    <div class="crew-photo">
+        <img src="@ImageHelper.GetImageUrl(Model.ProfilePath, "w185")" alt="@Model.Name" loading="lazy" />
+    </div>
+    <div class="crew-info">
+        <h4>@Model.Name</h4>
+        <p>@Model.Job</p>
+    </div>
+</a>

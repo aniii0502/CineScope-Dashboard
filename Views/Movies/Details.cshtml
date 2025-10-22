@@ -1,0 +1,156 @@
+@model CineScope.ViewModels.MovieDetailViewModel
+@{
+    // Check if the movie object exists before trying to access its properties
+    if (Model.Movie != null)
+    {
+        ViewData["Title"] = Model.Movie.Title;
+    }
+    var runtime = TimeSpan.FromMinutes(Model.Movie?.Runtime ?? 0);
+    var crewByDepartment = Model.Movie?.Crew.GroupBy(c => c.Department)
+    .OrderBy(g => g.Key == "Directing" ? 0 : g.Key == "Writing" ? 1 : 2)
+    .ThenBy(g => g.Key);
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/movie-details.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/actor-card.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/crew-card.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/movie-card.css" asp-append-version="true" />
+}
+
+@if (Model.Movie != null)
+{
+    <div class="details-hero" style="background-image: url(@ImageHelper.GetImageUrl(Model.Movie.BackdropPath, "w1280"));">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-poster">
+                <img src="@ImageHelper.GetImageUrl(Model.Movie.PosterPath, "w500")" alt="@Model.Movie.Title Poster" />
+            </div>
+            <div class="hero-info">
+                <h1>@Model.Movie.Title <span>(@DateFormatter.GetYear(Model.Movie.ReleaseDate))</span></h1>
+                <div class="info-meta">
+                    <span>@string.Join(", ", Model.Movie.Genres.Select(g => g.Name))</span>
+                    <span>•</span>
+                    <span>@runtime.Hours h @runtime.Minutes m</span>
+                </div>
+                <div class="info-rating"><strong>@Model.Movie.VoteAverage.ToString("0.0")</strong> / 10</div>
+                <div class="info-overview">
+                    <h3>Overview</h3>
+                    <p>@Model.Movie.Overview</p>
+                </div>
+                <div class="info-actions">
+                    @if (!string.IsNullOrEmpty(Model.Movie.TrailerKey))
+                    {
+                        <button class="btn-trailer" id="play-trailer-btn" data-trailer-key="@Model.Movie.TrailerKey">
+                            <i class="fa fa-play"></i> Watch Trailer
+                        </button>
+                    }
+                    <div class="share-container">
+                        <button class="btn-share" id="share-btn"><i class="fa fa-share-alt"></i> Share</button>
+                        <div class="share-menu" id="share-menu">
+                            <a href="#" class="share-item" id="share-twitter" target="_blank" title="Share on Twitter"><i
+                                    class="fab fa-twitter"></i></a>
+                            <a href="#" class="share-item" id="share-facebook" target="_blank" title="Share on Facebook"><i
+                                    class="fab fa-facebook"></i></a>
+                            <button class="share-item" id="copy-link-btn" title="Copy Link"><i
+                                    class="fa fa-link"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="details-main-content">
+        <div class="tabs">
+            <button class="tab-btn active" data-target="#cast-panel">Cast</button>
+            <button class="tab-btn" data-target="#crew-panel">Crew</button>
+            <button class="tab-btn" data-target="#details-panel">Details & Trivia</button>
+        </div>
+
+        <div class="tab-panels">
+            <div id="cast-panel" class="tab-panel active">
+                <div class="cast-grid">
+                    @foreach (var person in Model.Movie.Cast)
+                    {
+                        <partial name="_ActorCard" model="person" />
+                    }
+                </div>
+            </div>
+
+            <div id="crew-panel" class="tab-panel">
+                @if (crewByDepartment != null)
+                {
+                    @foreach (var group in crewByDepartment)
+                    {
+                        <h3 class="department-title">@group.Key</h3>
+                        <div class="crew-grid">
+                            @foreach (var member in group)
+                            {
+                                <partial name="_CrewCard" model="member" />
+                            }
+                        </div>
+                    }
+                }
+            </div>
+
+            <div id="details-panel" class="tab-panel">
+                <dl class="details-list">
+                    <dt>Status</dt>
+                    <dd>@Model.Movie.Status</dd>
+                    <dt>Original Language</dt>
+                    <dd>@Model.Movie.OriginalLanguage</dd>
+                    <dt>Budget</dt>
+                    <dd>@Model.Movie.BoxOfficeInfo?.Budget</dd>
+                    <dt>Revenue</dt>
+                    <dd>@Model.Movie.BoxOfficeInfo?.Revenue</dd>
+                </dl>
+                <div class="keywords-section">
+                    <h3>Keywords</h3>
+                    <div class="keywords-list">
+                        @foreach (var keyword in Model.Movie.Keywords)
+                        {
+                            <span class="keyword-tag">@keyword.Name</span>
+                        }
+                    </div>
+                </div>
+                <div class="trivia-section">
+                    <h3>Trivia</h3>
+                    <ul>
+                        @foreach (var fact in Model.Movie.Trivia)
+                        {
+                            <li>@fact</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="similar-movies-container">
+        @await Component.InvokeAsync("SimilarMovies", new { movieId = Model.Movie.Id })
+    </div>
+
+    <div class="modal-overlay" id="trailer-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close-btn" title="Close">&times;</button>
+            <div class="video-container">
+                <iframe id="youtube-player" src="" title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container text-center">
+        <h1>Movie not found</h1>
+        <p>The movie you are looking for could not be found.</p>
+    </div>
+}
+
+
+@section Scripts {
+    <script src="~/js/pages/movie-details.js" asp-append-version="true"></script>
+}

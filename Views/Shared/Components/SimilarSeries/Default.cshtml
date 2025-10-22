@@ -1,0 +1,14 @@
+@model IEnumerable<CineScope.Models.Series>
+
+@if (Model != null && Model.Any())
+{
+    <section class="content-section">
+        <h2>More Like This</h2>
+        <div class="card-carousel">
+            @foreach (var series in Model)
+            {
+                <partial name="_SeriesCard" model="series" />
+            }
+        </div>
+    </section>
+}

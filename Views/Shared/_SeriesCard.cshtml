@@ -1,0 +1,11 @@
+@model CineScope.Models.Series
+
+<a asp-controller="Series" asp-action="Details" asp-route-id="@Model.Id" class="movie-card">
+    <div class="card-poster">
+        <img src="@ImageHelper.GetImageUrl(Model.PosterPath)" alt="@Model.Name Poster" loading="lazy" />
+    </div>
+    <div class="card-info">
+        <h3>@Model.Name</h3>
+        <p>@Model.VoteAverage.ToString("0.0")/10</p>
+    </div>
+</a>

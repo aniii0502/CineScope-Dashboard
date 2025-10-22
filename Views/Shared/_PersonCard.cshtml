@@ -1,0 +1,21 @@
+@model CineScope.Models.Person
+
+<a asp-controller="Persons" asp-action="Details" asp-route-id="@Model.Id" class="actor-card">
+    <div class="actor-photo">
+        <img src="@ImageHelper.GetImageUrl(Model.ProfilePath, "w185", ImageHelper.PlaceholderType.Person)"
+            alt="@Model.Name" loading="lazy" />
+    </div>
+    <div class="actor-info">
+        <h4>@Model.Name</h4>
+        <p>
+            @if (!string.IsNullOrEmpty(Model.Character))
+            {
+                @Model.Character
+            }
+            else
+            {
+                @Model.KnownForDepartment
+            }
+        </p>
+    </div>
+</a>

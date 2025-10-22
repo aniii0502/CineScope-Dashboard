@@ -1,0 +1,95 @@
+﻿@inject IHttpContextAccessor HttpContextAccessor
+@{
+    Layout = null;
+    var title = ViewData["Title"] ?? "CineScope";
+    var themeCookie = HttpContextAccessor.HttpContext?.Request.Cookies["theme"];
+    var theme = !string.IsNullOrEmpty(themeCookie) ? themeCookie : "light";
+}
+
+<!DOCTYPE html>
+<html lang="en" data-theme="@theme">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@title - CineScope</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+
+<body>
+    <div id="mobile-sidebar" class="mobile-sidebar">
+        <button id="close-sidebar" class="close-sidebar" title="Close menu">&times;</button>
+        <nav class="mobile-nav-links">
+            <a asp-controller="Home" asp-action="Index">Home</a>
+            <a asp-controller="Movies" asp-action="Index">Movies</a>
+            <a asp-controller="Series" asp-action="Index">Series</a>
+        </nav>
+    </div>
+
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <button id="hamburger-btn" class="hamburger-btn" title="Open menu">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a asp-controller="Home" asp-action="Index" class="logo">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="150" height="50" viewBox="0 0 200 60">
+                        <rect width="200" height="60" rx="12" ry="12" fill="var(--header-footer-bg)" />
+
+                        <rect x="10" y="10" width="40" height="40" fill="var(--accent-color)" rx="4" ry="4" />
+
+                        <rect x="15" y="15" width="10" height="10" fill="var(--header-footer-bg)" />
+                        <rect x="25" y="15" width="10" height="10" fill="var(--header-footer-bg)" />
+                        <rect x="15" y="25" width="10" height="10" fill="var(--header-footer-bg)" />
+                        <rect x="25" y="25" width="10" height="10" fill="var(--header-footer-bg)" />
+                        <text x="50" y="40" font-family="Poppins, sans-serif" font-size="22" fill="var(--accent-color)"
+                            font-weight="bold">
+                            CineScope
+                        </text>
+
+                    </svg>
+                </a>
+            </div>
+
+            <nav class="nav-links">
+                <a asp-controller="Home" asp-action="Index" class="nav-item">Home</a>
+                <a asp-controller="Movies" asp-action="Index" class="nav-item">Movies</a>
+                <a asp-controller="Series" asp-action="Index" class="nav-item">Series</a>
+            </nav>
+
+            <div class="nav-actions">
+                <div class="search-container">
+                    <form id="search-form" asp-controller="Search" asp-action="Index" method="get">
+                        <input type="text" name="q" placeholder="Search..." class="search-input" />
+                        <button type="submit" class="search-submit" title="Search"><i class="fa fa-search"></i></button>
+                    </form>
+                    <button id="search-toggle" class="search-toggle" title="Toggle search">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <button id="theme-toggle" class="theme-btn" title="Toggle theme">
+                    <i class="fa fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        @RenderBody()
+    </main>
+
+    <footer class="footer">
+        <p>
+            &copy; @DateTime.Now.Year - CineScope |
+            <a asp-controller="Home" asp-action="About">About</a> |
+            Built with ❤️ using ASP.NET Core
+        </p>
+    </footer>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

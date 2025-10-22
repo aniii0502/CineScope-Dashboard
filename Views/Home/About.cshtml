@@ -1,0 +1,113 @@
+@{
+    ViewData["Title"] = "About CineScope";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/about.css" asp-append-version="true" />
+}
+
+<div class="about-container">
+
+    <!-- Hero Section -->
+    <section class="about-section hero">
+        <h1>Welcome to CineScope</h1>
+        <p class="lead">
+            Thank you for visiting! CineScope is a modern, responsive, and API-driven web application built with .NET,
+            designed to provide real-time movie, TV series, and person information using TMDB API.
+        </p>
+    </section>
+
+    <hr />
+
+    <!-- Suggestion Section -->
+    <section class="about-section contact-us">
+        <h2>Have a suggestion for us?</h2>
+        <p>
+            We’d love to hear your ideas for new features, improvements, or anything else that could make CineScope
+            better.
+        </p>
+        <button id="contact-btn" class="btn-accent">Contact Us</button>
+    </section>
+
+    <hr />
+
+    <!-- About Project Section -->
+    <section class="about-section">
+        <h2>About The Project</h2>
+
+        <h3>Project Overview</h3>
+        <p>
+            CineScope is a fully functional web application that fetches movie, TV series, and celebrity data in
+            real-time
+            from TMDB API. It does not rely on a local database, ensuring all content is always fresh and up-to-date.
+        </p>
+
+        <h3>Key Features</h3>
+        <ul>
+            <li>View popular, top-rated, and upcoming movies and series.</li>
+            <li>Discover movies and TV shows by genre, year, and popularity.</li>
+            <li>Search for movies, TV shows, and actors in one place.</li>
+            <li>Detailed information pages for movies, series, and people.</li>
+            <li>Watch trailers and view credits directly from the app.</li>
+            <li>Responsive design for mobile, tablet, and desktop devices.</li>
+        </ul>
+
+        <h3>How It Works</h3>
+        <p>
+            The application communicates with TMDB API to retrieve dynamic content. It uses Razor Pages for server-side
+            rendering, and all front-end interactions are handled using modern JavaScript and CSS. Users can explore
+            content without needing a local database or preloaded data.
+        </p>
+
+        <h3>Technologies & APIs Used</h3>
+        <ul>
+            <li>ASP.NET Core & C# for backend logic</li>
+            <li>Razor Pages for server-side UI rendering</li>
+            <li>HTML5, CSS3, JavaScript for frontend design and interactions</li>
+            <li>TMDB API for real-time movie, series, and person data</li>
+            <li>Formspree for handling contact form submissions</li>
+            <li>Responsive design principles for all devices</li>
+        </ul>
+
+        <h3>Future Enhancements</h3>
+        <ul>
+            <li>Add user authentication and personalized watchlists.</li>
+            <li>Integrate ratings, reviews, and recommendations system.</li>
+            <li>Include trending news and movie articles for users.</li>
+        </ul>
+    </section>
+
+</div>
+
+<!-- Contact Modal -->
+<div class="modal-overlay" id="contact-modal">
+    <div class="modal-content">
+        <button id="modal-close-btn" class="modal-close" title="Close">&times;</button>
+        <div id="form-content">
+            <h3>Send a Suggestion</h3>
+            <form id="contact-form" action="https://formspree.io/f/xyzndbbl" method="POST">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="suggestion">Suggestion</label>
+                    <textarea id="suggestion" name="suggestion" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn-accent">Submit Suggestion</button>
+            </form>
+        </div>
+        <div id="success-message" style="display: none;">
+            <h3>✅ Thank You!</h3>
+            <p>We've received your suggestion and will take a look at it soon.</p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/pages/about.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,89 @@
+@model CineScope.Models.PaginatedMovies
+@{
+    ViewData["Title"] = "Movies";
+    var currentGenre = ViewData["CurrentGenre"] as string;
+    var currentYear = ViewData["CurrentYear"] as string;
+    var currentSort = ViewData["CurrentSort"] as string;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/movie-list.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/movie-card.css" asp-append-version="true" />
+}
+
+<div class="list-page-container">
+    <aside class="filter-sidebar">
+        <h3><i class="fa fa-filter"></i> Filters</h3>
+        <form asp-action="Index" method="get">
+            <div class="filter-group">
+                <label for="genre">Genre</label>
+                <select id="genre" name="genre" class="form-control" asp-items="@(new SelectList(new[]
+                                                                                     {
+                                                                                         new { Value = "", Text = "All" },
+                                                                                         new { Value = "28", Text = "Action" },
+                                                                                         new { Value = "35", Text = "Comedy" },
+                                                                                         new { Value = "18", Text = "Drama" }
+                                                                                     }, "Value", "Text", currentGenre))"></select>
+            </div>
+            <div class="filter-group">
+                <label for="year">Year</label>
+                <select id="year" name="year" class="form-control" asp-items="@(new SelectList(new[]
+                                                                                   {
+                                                                                       new { Value = "", Text = "All" },
+                                                                                       new { Value = "2024", Text = "2024" },
+                                                                                       new { Value = "2023", Text = "2023" }
+                                                                                   }, "Value", "Text", currentYear))"></select>
+            </div>
+            <div class="filter-group">
+                <label for="sort">Sort By</label>
+                <select id="sort" name="sort" class="form-control" asp-items="@(new SelectList(new[]
+                                                                                   {
+                                                                                       new { Value = "popularity.desc", Text = "Popularity" },
+                                                                                       new { Value = "vote_average.desc", Text = "Rating" },
+                                                                                       new { Value = "release_date.desc", Text = "Release Date" }
+                                                                                   }, "Value", "Text", currentSort))"></select>
+            </div>
+            <button type="submit" class="btn-apply-filters">Apply Filters</button>
+        </form>
+    </aside>
+
+    <main class="results-content">
+        <h1>Movies</h1>
+        @if (Model != null && Model.Results.Any())
+        {
+            <div class="results-grid">
+                @foreach (var movie in Model.Results)
+                {
+                    <partial name="_MovieCard" model="movie" />
+                }
+            </div>
+
+            <nav class="pagination-container">
+                <ul class="pagination">
+                    @if (Model.Page > 1)
+                    {
+                        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-genre="@currentGenre"
+                                asp-route-year="@currentYear" asp-route-sort="@currentSort"
+                                asp-route-page="@(Model.Page - 1)">Previous</a></li>
+                    }
+                    @for (int i = Math.Max(1, Model.Page - 2); i <= Math.Min(Model.TotalPages, Model.Page + 2); i++)
+                    {
+                        <li class="page-item @(i == Model.Page ? "active" : "")"><a class="page-link" asp-action="Index"
+                                asp-route-genre="@currentGenre" asp-route-year="@currentYear" asp-route-sort="@currentSort"
+                                asp-route-page="@i">@i</a></li>
+                    }
+                    @if (Model.Page < Model.TotalPages)
+                    {
+                        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-genre="@currentGenre"
+                                asp-route-year="@currentYear" asp-route-sort="@currentSort"
+                                asp-route-page="@(Model.Page + 1)">Next</a></li>
+                    }
+                </ul>
+            </nav>
+        }
+        else
+        {
+            <p>No movies found for the selected filters.</p>
+        }
+    </main>
+</div>

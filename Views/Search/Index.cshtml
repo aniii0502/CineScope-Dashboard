@@ -1,0 +1,90 @@
+@model CineScope.Models.PaginatedSearchResult
+@{
+    ViewData["Title"] = "Search Results";
+    var query = ViewData["CurrentQuery"] as string;
+    var category = ViewData["CurrentCategory"] as string ?? "all";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/search-results.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/movie-card.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/actor-card.css" asp-append-version="true" />
+}
+
+<div class="list-page-container">
+    <aside class="filter-sidebar">
+        <h3>Category</h3>
+        <ul class="category-filters">
+            <li class="@(category == "all" ? "active" : "")">
+                <a asp-action="Index" asp-route-q="@query" asp-route-category="all">All</a>
+            </li>
+            <li class="@(category == "movie" ? "active" : "")">
+                <a asp-action="Index" asp-route-q="@query" asp-route-category="movie">Movies</a>
+            </li>
+            <li class="@(category == "series" ? "active" : "")">
+                <a asp-action="Index" asp-route-q="@query" asp-route-category="series">TV Series</a>
+            </li>
+            <li class="@(category == "person" ? "active" : "")">
+                <a asp-action="Index" asp-route-q="@query" asp-route-category="person">People</a>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="results-content">
+        @if (!string.IsNullOrEmpty(query))
+        {
+            <h1>Results for "@query"</h1>
+        }
+
+        @if (Model != null && Model.Results.Any())
+        {
+            <div class="results-grid">
+                @foreach (var item in Model.Results)
+                {
+                    @switch (item.Type)
+                    {
+                        case SearchResultType.Movie:
+                            <partial name="_MovieCard" model="item.Movie" />
+                            break;
+                        case SearchResultType.Series:
+                            <partial name="_SeriesCard" model="item.Series" />
+                            break;
+                        case SearchResultType.Person:
+                            <partial name="_PersonCard" model="item.Person" />
+                            break;
+                    }
+                }
+            </div>
+
+            <nav class="pagination-container" aria-label="Page navigation">
+                <ul class="pagination">
+                    @if (Model.Page > 1)
+                    {
+                        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-q="@query"
+                                asp-route-category="@category" asp-route-page="@(Model.Page - 1)">Previous</a></li>
+                    }
+
+                    @for (int i = Math.Max(1, Model.Page - 2); i <= Math.Min(Model.TotalPages, Model.Page + 2); i++)
+                    {
+                        <li class="page-item @(i == Model.Page ? "active" : "")"><a class="page-link" asp-action="Index"
+                                asp-route-q="@query" asp-route-category="@category" asp-route-page="@i">@i</a></li>
+                    }
+
+                    @if (Model.Page < Model.TotalPages)
+                    {
+                        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-q="@query"
+                                asp-route-category="@category" asp-route-page="@(Model.Page + 1)">Next</a></li>
+                    }
+                </ul>
+            </nav>
+        }
+        else if (!string.IsNullOrEmpty(query))
+        {
+            <p>No results found for "@query" in this category.</p>
+        }
+        else
+        {
+            <p>Please enter a search term to begin.</p>
+        }
+    </main>
+</div>

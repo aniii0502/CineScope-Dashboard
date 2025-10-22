@@ -1,0 +1,14 @@
+@model CineScope.Models.MovieCredit
+
+<a asp-controller="Movies" asp-action="Details" asp-route-id="@Model.Id" class="movie-card">
+    <div class="card-poster">
+        <img src="@ImageHelper.GetImageUrl(Model.PosterPath)" alt="@Model.Title Poster" loading="lazy" />
+    </div>
+    <div class="card-info">
+        <h3>@Model.Title</h3>
+        @if (!string.IsNullOrEmpty(Model.Character))
+        {
+            <p>as @Model.Character</p>
+        }
+    </div>
+</a>

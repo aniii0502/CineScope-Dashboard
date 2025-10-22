@@ -1,0 +1,17 @@
+@model IEnumerable<CineScope.Models.Movie>
+
+@if (Model != null && Model.Any())
+{
+    <section class="content-section">
+        <h2>More Like This</h2>
+        <div class="card-carousel">
+            @foreach (var movie in Model)
+            {
+                // This line is the crucial part.
+                // It passes the single 'movie' from the loop to the partial,
+                // not the entire 'Model' (which is the list).
+                <partial name="_MovieCard" model="movie" />
+            }
+        </div>
+    </section>
+}

@@ -1,0 +1,81 @@
+@model CineScope.ViewModels.PersonDetailViewModel
+@{
+    if (Model.Person != null)
+    {
+        ViewData["Title"] = Model.Person.Name;
+    }
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/person-details.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/movie-card.css" asp-append-version="true" />
+}
+
+@if (Model.Person != null)
+{
+    <div class="profile-container">
+        <header class="profile-header">
+            <div class="profile-photo">
+                <img src="@ImageHelper.GetImageUrl(Model.Person.ProfilePath, "w500", ImageHelper.PlaceholderType.Person)"
+                    alt="@Model.Person.Name" />
+            </div>
+            <div class="profile-info">
+                <h1>@Model.Person.Name</h1>
+                <div class="personal-details">
+                    <dl>
+                        <dt>Known For</dt>
+                        <dd>@Model.Person.KnownForDepartment</dd>
+                        <dt>Birthday</dt>
+                        <dd>@Model.Person.Birthday</dd>
+                        <dt>Place of Birth</dt>
+                        <dd>@Model.Person.PlaceOfBirth</dd>
+                    </dl>
+                </div>
+                <div class="biography">
+                    <h3>Biography</h3>
+                    <p>@Model.Person.Biography</p>
+                </div>
+            </div>
+        </header>
+
+        <section class="filmography-section">
+            <h2>Filmography</h2>
+            <div class="tabs">
+                <button class="tab-btn active" data-target="#movies-panel">Movies
+                    (@Model.Person.MovieCredits.Count)</button>
+                <button class="tab-btn" data-target="#series-panel">TV Series (@Model.Person.SeriesCredits.Count)</button>
+            </div>
+
+            <div class="tab-panels">
+                <div id="movies-panel" class="tab-panel active">
+                    <div class="card-carousel">
+                        @foreach (var credit in Model.Person.MovieCredits)
+                        {
+                            <partial name="_MovieCreditCard" model="credit" />
+                        }
+                    </div>
+                </div>
+
+                <div id="series-panel" class="tab-panel">
+                    <div class="card-carousel">
+                        @foreach (var credit in Model.Person.SeriesCredits)
+                        {
+                            <partial name="_SeriesCreditCard" model="credit" />
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+}
+else
+{
+    <div class="container text-center">
+        <h1>Person not found</h1>
+        <p>The person you are looking for could not be found.</p>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/pages/person-details.js" asp-append-version="true"></script>
+}
