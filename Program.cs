@@ -2,9 +2,12 @@ using CineScope.Config;
 using CineScope.Helpers;
 using CineScope.Services.Implementations;
 using CineScope.Services.Interfaces;
+using DotNetEnv;
+
+Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
-
+var apiKey = builder.Configuration["ApiKeys:TmdbApiKey"];
 builder.Services.AddControllersWithViews();
 
 builder.Services.Configure<ApiKeys>(builder.Configuration.GetSection("ApiKeys"));
@@ -33,8 +36,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
-app.Urls.Add("http://0.0.0.0:80");
 
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 
